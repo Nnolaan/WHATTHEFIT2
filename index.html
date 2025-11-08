@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>WHATTHEFIT</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barrio&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --background-color:#1a1a1a; --text-color:#f0f0f0; --card-background:#2c2c2c;
+        --feature-background:#333333; --input-background:#444; --border-color:#555;
+        --primary-accent-color:#c90000; --primary-accent-hover:#e00000;
+      }
+      [data-theme="light"]{
+        --background-color:#f0f2f5; --text-color:#1c1e21; --card-background:#fff;
+        --feature-background:#fdfdfd; --input-background:#e4e6eb; --border-color:#ced0d4;
+      }
+      body{font-family:"Funnel Display",sans-serif;font-size:16px;background:var(--background-color);color:var(--text-color);
+        margin:0;padding:20px;transition:.3s}
+      .container{max-width:800px;margin:auto;background:var(--card-background);padding:30px;border-radius:15px}
+      h1{text-align:center;color:var(--primary-accent-color);font-family:"Barrio",system-ui;font-size:80px;transition:.3s}
+      h2{text-align:center;color:var(--primary-accent-color);transition:.3s}
+      .theme-switcher{display:flex;justify-content:center;align-items:center;gap:15px;margin-bottom:30px;
+        background:var(--feature-background);padding:10px;border-radius:10px}
+      .theme-button{padding:8px 12px;border:1px solid var(--border-color);background:var(--input-background);
+        color:var(--text-color);border-radius:8px;cursor:pointer;font-family:"Funnel Display",sans-serif}
+      .color-input-wrapper{display:flex;align-items:center;gap:10px}
+      .color-picker-label{position:relative;display:inline-block;width:30px;height:30px;cursor:pointer;border-radius:50%;border:1px solid var(--border-color)}
+      input[type="color"]{opacity:0;width:100%;height:100%;cursor:pointer;position:absolute;top:0;left:0}
+      .feature{background:var(--feature-background);padding:20px;margin-bottom:20px;border-radius:10px}
+      label{display:block;margin-bottom:8px;font-weight:bold}
+      select,.checkbox-group{width:100%;padding:10px;margin-bottom:15px;border-radius:8px;font-size:1em;
+        border:1px solid var(--border-color);background:var(--input-background);color:var(--text-color);box-sizing:border-box}
+      .checkbox-container{background:var(--input-background);padding:10px;border-radius:8px;margin-bottom:15px;
+        border:1px solid var(--border-color)}
+      .checkbox-group{display:flex;flex-wrap:wrap;gap:15px}
+      .checkbox-group label{font-weight:normal;display:flex;align-items:center;gap:5px}
+      .button-group{margin-top:20px}
+      button{padding:12px 20px;border:none;border-radius:8px;cursor:pointer;background:var(--primary-accent-color);
+        color:#fff;font-size:1em;font-family:"Funnel Display",sans-serif;font-weight:bold;margin-right:10px;transition:.3s}
+      button:hover:not(:disabled){background:var(--primary-accent-hover);box-shadow:0 0 15px var(--primary-accent-hover),0 0 25px var(--primary-accent-hover)}
+      button:disabled{background:#555;cursor:not-allowed;opacity:.7}
+      .output{margin-top:20px;padding:15px;background:var(--background-color);border-radius:8px;white-space:pre-wrap;
+        border:1px solid var(--border-color);min-height:50px;line-height:1.6;font-size:1em;}
+      .palette-container{margin-top:15px;padding:10px;background-color:var(--input-background);border-radius:8px;}
+      .palette{margin-top:8px;}
+      .palette h4{margin:0 0 5px 0;font-size:0.9em;opacity:0.8;}
+      .swatches{display:flex;gap:5px;}
+      .swatch{width:25px;height:25px;border-radius:50%;border:1px solid var(--border-color);}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>WHATTHEFIT</h1>
+
+      <div class="theme-switcher">
+        <span>Theme:</span>
+        <button id="light-mode-btn" class="theme-button">Light</button>
+        <button id="dark-mode-btn" class="theme-button">Dark</button>
+        <div class="color-input-wrapper">
+          <span>Color:</span>
+          <label class="color-picker-label" id="accent-color-preview" style="background-color: #c90000;">
+            <input type="color" id="accent-color-picker" value="#c90000">
+          </label>
+        </div>
+      </div>
+
+      <!-- FEATURE 1: Fashion Concept Ideator -->
+      <div id="feature1" class="feature">
+        <h2>Fashion Concept</h2>
+        <label for="style1">Style</label>
+        <select id="style1">
+          <option>Minimalist</option><option>Casual</option><option>Sporty</option><option>Gothic</option>
+          <option>Classic</option><option>Punk</option><option>Futuristic</option><option>Y2K</option>
+          <option>Formal</option><option>Vintage</option><option>Streetwear</option><option>Bohemia</option>
+          <option>Feminine</option><option>Sexy</option>
+        </select>
+
+        <label>Garment Type</label>
+        <div class="checkbox-container">
+          <div class="checkbox-group" id="garmentType1">
+            <label><input type="checkbox" value="Blazer"> Blazer</label>
+            <label><input type="checkbox" value="Dress"> Dress</label>
+            <label><input type="checkbox" value="Skirt"> Skirt</label>
+            <label><input type="checkbox" value="Trousers"> Trousers</label>
+            <label><input type="checkbox" value="Jumpsuit"> Jumpsuit</label>
+            <label><input type="checkbox" value="Hoodie"> Hoodie</label>
+            <label><input type="checkbox" value="Coat"> Coat</label>
+            <label><input type="checkbox" value="Shirt"> Shirt</label> <!-- Changed -->
+            <label><input type="checkbox" value="T-Shirt"> T-Shirt</label> <!-- Changed -->
+            <label><input type="checkbox" value="Gown"> Gown</label>
+            <label><input type="checkbox" value="Set"> Set</label>
+            <label><input type="checkbox" value="Shoes"> Shoes</label> <!-- Added -->
+          </div>
+        </div>
+
+        <label for="color1">Color</label>
+        <label class="color-picker-label" id="color-preview1" style="background-color: #c90000;">
+            <input type="color" id="color1" value="#c90000">
+        </label>
+        <div id="palette-container1" class="palette-container" style="display: none;"></div>
+
+
+        <label for="climate1">Climate</label>
+        <select id="climate1">
+          <option>Hot / Humid</option><option>Mild</option><option>Cool / Cold</option>
+          <option>Rain</option><option>Don’t mind, as long as the fit is cool</option>
+        </select>
+        
+        <div class="button-group">
+          <button id="generate1">Generate</button>
+          <button id="expand1" disabled>Expand</button> <!-- Added -->
+          <button id="mutate1" disabled>Mutate</button> <!-- Added -->
+          <button id="copy1">Copy</button>
+          <button id="export1">Export (.txt)</button>
+        </div>
+
+        <div id="output1" class="output"></div>
+      </div>
+
+      <!-- FEATURE 2: Your Daily Outfits -->
+      <div id="feature2" class="feature">
+        <h2>Your Daily Outfits</h2>
+        <label for="style2">Style</label>
+        <select id="style2">
+          <option>Minimalist</option><option>Casual</option><option>Sporty</option><option>Gothic</option>
+          <option>Classic</option><option>Punk</option><option>Futuristic</option><option>Y2K</option>
+          <option>Formal</option><option>Vintage</option><option>Streetwear</option><option>Bohemia</option>
+          <option>Feminine</option><option>Sexy</option>
+        </select>
+        
+        <label>Garment Type</label>
+        <div class="checkbox-container">
+          <div class="checkbox-group" id="garmentType2">
+            <label><input type="checkbox" value="Blazer"> Blazer</label>
+            <label><input type="checkbox" value="Dress"> Dress</label>
+            <label><input type="checkbox" value="Skirt"> Skirt</label>
+            <label><input type="checkbox" value="Trousers"> Trousers</label>
+            <label><input type="checkbox" value="Jumpsuit"> Jumpsuit</label>
+            <label><input type="checkbox" value="Hoodie"> Hoodie</label>
+            <label><input type="checkbox" value="Coat"> Coat</label>
+            <label><input type="checkbox" value="Shirt"> Shirt</label>
+            <label><input type="checkbox" value="T-Shirt"> T-Shirt</label>
+            <label><input type="checkbox" value="Gown"> Gown</label>
+            <label><input type="checkbox" value="Set"> Set</label>
+            <label><input type="checkbox" value="Shoes"> Shoes</label>
+          </div>
+        </div>
+
+        <label for="bodyShape2">Body Shape</label>
+        <select id="bodyShape2">
+          <option>Hourglass</option><option>Apple</option><option>Pear (Triangle)</option>
+          <option>Rectangle (Straight)</option><option>Inverted Triangle</option>
+        </select>
+
+        <label for="occasion2">Occasion</label>
+        <select id="occasion2">
+          <option>Casual</option><option>Formal</option><option>Performance</option><option>Editorial</option>
+        </select>
+
+        <label for="color2">Color</label>
+        <label class="color-picker-label" id="color-preview2" style="background-color: #c90000;">
+            <input type="color" id="color2" value="#c90000">
+        </label>
+        <div id="palette-container2" class="palette-container" style="display: none;"></div>
+
+        <div class="button-group">
+            <button id="generate2">Generate</button>
+            <button id="expand2" disabled>Expand</button> <!-- Added -->
+            <button id="mutate2" disabled>Mutate</button> <!-- Added -->
+            <button id="copy2">Copy</button>
+            <button id="export2">Export (.txt)</button>
+        </div>
+
+        <div id="output2" class="output"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      const featureStates = {
+        '1': { lastConcept: '' },
+        '2': { lastConcept: '' }
+      };
+
+      function cleanApiResponse(text) {
+        return text.replace(/^[\s]*[\*#\-]+/gm, '').trim();
+      }
+
+      async function callProxy(prompt, outputEl, btnEl) {
+        outputEl.textContent = 'Generating...';
+        if(btnEl) { btnEl.disabled = true; btnEl.textContent = 'Generating...'; }
+        
+        try {
+          const r = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+          });
+          const data = await r.json();
+          if (!r.ok) throw new Error(data?.error || 'API error');
+          const text = data?.text || 'No content generated.';
+          outputEl.innerHTML = cleanApiResponse(text).replace(/\n/g, '<br>');
+          return text;
+        } catch (e) {
+          outputEl.textContent = `Error: ${e.message}`;
+          return null;
+        } finally {
+          if(btnEl) { btnEl.disabled = false; btnEl.textContent = btnEl.dataset.originalText || 'Generate'; }
+        }
+      }
+
+      async function generatePalettes(hexColor, containerEl) {
+          containerEl.style.display = 'block';
+          containerEl.innerHTML = '<h4>Generating Palettes...</h4>';
+          const prompt = `Given the main hex color "${hexColor}", generate three distinct color palettes. For each palette, provide a theme name (e.g., "Cool", "Warm", "Neutral") and a list of 4 complementary color names (like "Teal Blue", "Pistachio", "Terracotta"). Format the response as a JSON object like this: {"palettes": [{"theme": "Theme Name", "colors": ["Color Name 1", "Color Name 2", "Color Name 3", "Color Name 4"]}]}`;
+
+          try {
+              const r = await fetch('/api/generate', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ prompt })
+              });
+              const data = await r.json();
+              if (!r.ok) throw new Error(data?.error || 'API error');
+              
+              const jsonString = data.text.match(/\{.*\}/s)[0];
+              const palettesData = JSON.parse(jsonString);
+
+              containerEl.innerHTML = '';
+              palettesData.palettes.forEach(p => {
+                  const paletteDiv = document.createElement('div');
+                  paletteDiv.className = 'palette';
+                  paletteDiv.innerHTML = `<h4>${p.theme} Palette:</h4><div class="swatches">${p.colors.map(c => `<div class="swatch" title="${c}" style="background-color:${c.replace(/\s/g, '')};"></div>`).join('')}</div>`;
+                  containerEl.appendChild(paletteDiv);
+              });
+
+          } catch (e) {
+              containerEl.innerHTML = `<h4>Error generating palettes.</h4>`;
+              console.error(e);
+          }
+      }
+
+      // --- Feature 1 Setup ---
+      document.getElementById('generate1').addEventListener('click', async (ev) => {
+        const style = document.getElementById('style1').value;
+        const garmentTypes = Array.from(document.querySelectorAll('#garmentType1 input:checked')).map(el => el.value).join(', ');
+        const color = document.getElementById('color1').value;
+        const climate = document.getElementById('climate1').value;
+        
+        const prompt = `Act as a senior fashion designer. Generate a concise, core concept for a fashion idea based on these inputs. The concept should be around 300 words. Use descriptive color names instead of hex codes. The output must be clean, readable text without markdown symbols like '*' or '#'. Inputs: Style: ${style}, Garment(s): ${garmentTypes || 'Any'}, Main Color: ${color}, Climate: ${climate}.`;
+        
+        const result = await callProxy(prompt, document.getElementById('output1'), ev.currentTarget);
+        if (result) {
+            featureStates['1'].lastConcept = result;
+            document.getElementById('expand1').disabled = false;
+            document.getElementById('mutate1').disabled = false;
+        }
+      });
+
+      document.getElementById('expand1').addEventListener('click', async (ev) => {
+        const prompt = `Take this core fashion concept and expand it into a full, detailed plan (maximum 800 words). Provide detailed sections for Fabric Shortlist, Construction Notes, Accessory & Material Tips, and Warnings. Use descriptive color names, not hex codes. The output must be clean text without markdown. Core Concept: "${featureStates['1'].lastConcept}"`;
+        await callProxy(prompt, document.getElementById('output1'), ev.currentTarget);
+      });
+
+      document.getElementById('mutate1').addEventListener('click', async (ev) => {
+        const prompt = `Take this fashion concept and "mutate" it into a new, related but distinctly different idea. Keep the new concept concise (around 300 words). Use descriptive color names, not hex codes. The output must be clean text. Original Concept: "${featureStates['1'].lastConcept}"`;
+        const result = await callProxy(prompt, document.getElementById('output1'), ev.currentTarget);
+        if (result) {
+            featureStates['1'].lastConcept = result; // Update state with the new mutated concept
+        }
+      });
+
+      // --- Feature 2 Setup ---
+       document.getElementById('generate2').addEventListener('click', async (ev) => {
+        const style = document.getElementById('style2').value;
+        const garmentTypes = Array.from(document.querySelectorAll('#garmentType2 input:checked')).map(el => el.value).join(', ');
+        const bodyShape = document.getElementById('bodyShape2').value;
+        const occasion = document.getElementById('occasion2').value;
+        const color = document.getElementById('color2').value;
+        
+        const prompt = `Act as a friendly personal stylist. Generate a concise daily outfit idea (around 300 words) based on these inputs. Avoid jargon. Use descriptive color names instead of hex codes. The output must be clean, readable text without markdown. Inputs: Style: ${style}, Garment(s): ${garmentTypes || 'Any'}, Body Shape: ${bodyShape}, Occasion: ${occasion}, Main Color: ${color}.`;
+        
+        const result = await callProxy(prompt, document.getElementById('output2'), ev.currentTarget);
+        if (result) {
+            featureStates['2'].lastConcept = result;
+            document.getElementById('expand2').disabled = false;
+            document.getElementById('mutate2').disabled = false;
+        }
+      });
+
+      document.getElementById('expand2').addEventListener('click', async (ev) => {
+        const prompt = `Take this core outfit idea and expand it with more details (maximum 800 words). Provide friendly, easy-to-understand sections for Fabric Choices, Layering/Construction, Accessory Tips (shoes, bags, jewelry), and practical Warnings. Use descriptive color names, not hex codes. The output must be clean text. Core Idea: "${featureStates['2'].lastConcept}"`;
+        await callProxy(prompt, document.getElementById('output2'), ev.currentTarget);
+      });
+
+      document.getElementById('mutate2').addEventListener('click', async (ev) => {
+        const prompt = `Take this daily outfit idea and "mutate" it for a different vibe or occasion. Keep the new idea concise (around 300 words). Use descriptive color names, not hex codes. The output must be clean text. Original Idea: "${featureStates['2'].lastConcept}"`;
+        const result = await callProxy(prompt, document.getElementById('output2'), ev.currentTarget);
+        if (result) {
+            featureStates['2'].lastConcept = result;
+        }
+      });
+      
+      // --- Universal UI Functionality ---
+      ['1', '2'].forEach(id => {
+        document.getElementById(`copy${id}`).addEventListener('click', () => {
+          const t = document.getElementById(`output${id}`).textContent;
+          navigator.clipboard.writeText(t).then(() => alert('Copied to clipboard!'));
+        });
+        document.getElementById(`export${id}`).addEventListener('click', () => {
+          const t = document.getElementById(`output${id}`).textContent;
+          const blob = new Blob([t], { type: 'text/plain' });
+          const a = document.createElement('a');
+          a.download = id === '1' ? 'fashion_concept.txt' : 'daily_outfit.txt';
+          a.href = URL.createObjectURL(blob); a.click(); URL.revokeObjectURL(a.href);
+        });
+
+        const colorInput = document.getElementById(`color${id}`);
+        const colorPreview = document.getElementById(`color-preview${id}`);
+        const paletteContainer = document.getElementById(`palette-container${id}`);
+        function updateColor(){
+            colorPreview.style.backgroundColor = colorInput.value;
+            generatePalettes(colorInput.value, paletteContainer);
+        }
+        colorInput.addEventListener('input', updateColor);
+        updateColor();
+      });
+      
+      // --- Theme engine ---
+      const docEl = document.documentElement;
+      const accentPicker = document.getElementById('accent-color-picker');
+      const accentPreview = document.getElementById('accent-color-preview');
+      function setTheme(t){ docEl.setAttribute('data-theme', t); localStorage.setItem('whatthefit_theme', t); }
+      function setAccentColor(c){
+        docEl.style.setProperty('--primary-accent-color', c);
+        docEl.style.setProperty('--primary-accent-hover', c + 'e0');
+        accentPreview.style.backgroundColor = c;
+        localStorage.setItem('whatthefit_accent', c);
+      }
+      document.getElementById('light-mode-btn').addEventListener('click', ()=>setTheme('light'));
+      document.getElementById('dark-mode-btn').addEventListener('click', ()=>setTheme('dark'));
+      accentPicker.addEventListener('input', (e)=>setAccentColor(e.target.value));
+
+      const savedTheme = localStorage.getItem('whatthefit_theme') || 'dark';
+      const savedAccent = localStorage.getItem('whatthefit_accent') || '#c90000';
+      setTheme(savedTheme); setAccentColor(savedAccent); accentPicker.value = savedAccent;
+    </script>
+  </body>
+</html>
