@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light"> <!-- Default theme set to light -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -27,15 +27,18 @@
       h1{text-align:center;color:var(--primary-accent-color);font-family:"Barrio",system-ui;font-size:80px;transition:.3s}
       h2{text-align:center;color:var(--primary-accent-color);transition:.3s}
       
-      .dashboard-layout { display: flex; gap: 20px; }
+      .dashboard-layout { display: flex; align-items: flex-start; gap: 20px; } /* Aligned items to the top */
       .control-panel { flex: 1; min-width: 320px; }
       .canvas { flex: 2; }
       @media (max-width: 900px) { .dashboard-layout { flex-direction: column; } }
 
       .theme-switcher{display:flex;justify-content:center;align-items:center;gap:15px;margin-bottom:30px;
         background:var(--feature-background);padding:10px;border-radius:10px}
-      .theme-button{padding:8px 12px;border:1px solid var(--border-color);background:var(--input-background);
-        color:var(--text-color);border-radius:8px;cursor:pointer;font-family:"Funnel Display",sans-serif}
+      
+      /* Style for theme/accent buttons specifically */
+      .theme-button, #accent-color-preview { background-color: #000 !important; color: #fff !important; border-color: #333 !important;}
+      [data-theme="light"] .theme-button, [data-theme="light"] #accent-color-preview { background-color: #000 !important; border-color: #333 !important;}
+
       .color-input-wrapper{display:flex;align-items:center;gap:10px}
       .color-picker-label{position:relative;display:inline-block;width:30px;height:30px;cursor:pointer;border-radius:50%;border:1px solid var(--border-color)}
       input[type="color"]{opacity:0;width:100%;height:100%;cursor:pointer;position:absolute;top:0;left:0}
@@ -48,17 +51,22 @@
         border:1px solid var(--border-color)}
       .checkbox-group{display:flex;flex-wrap:wrap;gap:15px}
       .checkbox-group label{font-weight:normal;display:flex;align-items:center;gap:5px}
-      .button-group{margin-top:20px; display:flex; flex-wrap:wrap; gap:10px;}
-      button{padding:12px 20px;border:none;border-radius:8px;cursor:pointer;background:var(--primary-accent-color);
-        color:#fff;font-size:1em;font-family:"Funnel Display",sans-serif;font-weight:bold;margin-right:10px;transition:.3s}
+      
+      /* Smaller Buttons */
+      .button-group{margin-top:20px; display:flex; flex-wrap:wrap; gap:8px;}
+      button{padding:8px 16px; border:none;border-radius:8px;cursor:pointer;background:var(--primary-accent-color);
+        color:#fff;font-size:0.9em;font-family:"Funnel Display",sans-serif;font-weight:bold;margin-right:0;transition:.3s}
+      
       button:hover:not(:disabled){background:var(--primary-accent-hover);box-shadow:0 0 15px var(--primary-accent-hover),0 0 25px var(--primary-accent-hover)}
       button:disabled{background:#555;cursor:not-allowed;opacity:.7}
       
       .output{ margin-top:20px; padding:15px; background:var(--card-background); border-radius:8px; white-space:pre-wrap;
         border:1px solid var(--border-color); line-height:1.6; font-size:1em;
-        max-height: 450px; overflow-y: auto; min-height: 450px; }
+        height: 450px; /* Changed from min/max to fixed height */
+        overflow-y: auto;
+      }
 
-      .palette-container{margin-top:15px;padding:10px;background-color:var(--input-background);border-radius:8px;}
+      .palette-container{margin-top:15px;padding:10px;background-color:var(--input-background);border-radius:8px; min-height:50px;}
       .palette{position:relative; margin-top:8px; cursor:pointer; padding:5px; border-radius:5px; transition: background-color 0.2s;}
       .palette:hover{ background-color: var(--border-color); }
       .palette h4{margin:0 0 5px 0;font-size:0.9em;opacity:0.8;}
@@ -110,8 +118,8 @@
             
             <label for="color1">Color</label>
             <div class="color-selection-wrapper">
-              <label class="color-picker-label" id="color-preview1" style="background-color: #c90000;">
-                  <input type="color" id="color1" value="#c90000">
+              <label class="color-picker-label" id="color-preview1" style="background-color: #000000;">
+                  <input type="color" id="color1" value="#000000">
               </label>
             </div>
             <div id="palette-container1" class="palette-container" style="display: none;">
@@ -160,8 +168,8 @@
             
             <label for="color2">Color</label>
             <div class="color-selection-wrapper">
-              <label class="color-picker-label" id="color-preview2" style="background-color: #c90000;">
-                  <input type="color" id="color2" value="#c90000">
+              <label class="color-picker-label" id="color-preview2" style="background-color: #000000;">
+                  <input type="color" id="color2" value="#000000">
               </label>
             </div>
              <div id="palette-container2" class="palette-container" style="display: none;">
@@ -178,7 +186,7 @@
                 <button id="expand1" data-original-text="Expand" disabled>Expand</button>
                 <button id="mutate1" data-original-text="Mutate" disabled>Mutate</button>
                 <button id="copy1">Copy</button>
-                <button id="export1">Export (.txt)</button>
+                <button id="export1">Export</button>
                 <button id="clear1">Clear</button>
             </div>
             <div id="output1" class="output"></div>
@@ -191,7 +199,7 @@
                 <button id="expand2" data-original-text="Expand" disabled>Expand</button>
                 <button id="mutate2" data-original-text="Mutate" disabled>Mutate</button>
                 <button id="copy2">Copy</button>
-                <button id="export2">Export (.txt)</button>
+                <button id="export2">Export</button>
                 <button id="clear2">Clear</button>
             </div>
             <div id="output2" class="output"></div>
@@ -206,12 +214,16 @@
         '2': { lastConcept: '', selectedPalette: '' }
       };
 
+      // Improved cleanup function
       function cleanApiResponse(text) {
-        return text.replace(/^[\s]*[\*#\-]+/gm, '').trim();
+        return text
+          .replace(/\*\*/g, '') // Remove bold markers
+          .replace(/[\*#\-]/g, '')  // Remove all markdown symbols
+          .trim();
       }
 
       async function callProxy(prompt, outputEl, btnEl) {
-        outputEl.textContent = 'Generating...';
+        outputEl.innerHTML = 'Generating...'; // Use innerHTML to allow for line breaks
         if(btnEl) { btnEl.disabled = true; btnEl.textContent = 'Generating...'; }
         
         try {
@@ -255,7 +267,7 @@
               
               const palettesData = JSON.parse(jsonStringMatch[0]);
 
-              containerEl.innerHTML = '<h4>Click a palette to use it:</h4>'; // Clear old content
+              containerEl.innerHTML = '<h4>Click a palette to use it:</h4>';
               palettesData.palettes.forEach(p => {
                   const paletteDiv = document.createElement('div');
                   paletteDiv.className = 'palette';
@@ -275,7 +287,7 @@
               containerEl.innerHTML = `<h4>Error generating palettes. Please try again.</h4>`;
               console.error(e);
           } finally {
-              containerEl.prepend(okBtn); // Put the button back at the top
+              containerEl.prepend(okBtn);
               okBtn.disabled = false;
               okBtn.textContent = 'Generate Palettes';
           }
@@ -288,7 +300,7 @@
         const paletteContainer = document.getElementById(`palette-container${id}`);
         const okBtn = document.getElementById(`ok-color${id}`);
         paletteContainer.innerHTML = '';
-        paletteContainer.appendChild(okBtn); // Put button back
+        paletteContainer.appendChild(okBtn);
         paletteContainer.style.display = 'none';
         
         document.querySelectorAll(`#garmentType${id} input[type="checkbox"]`).forEach(cb => cb.checked = false);
@@ -297,15 +309,14 @@
         document.getElementById(`mutate${id}`).disabled = true;
       }
 
-      // --- Feature 1 Setup ---
+      // Feature 1
       document.getElementById('generate1').addEventListener('click', async (ev) => {
         const style = document.getElementById('style1').value;
         const garmentTypes = Array.from(document.querySelectorAll('#garmentType1 input:checked')).map(el => el.value).join(', ');
         const color = document.getElementById('color1').value;
         const climate = document.getElementById('climate1').value;
         const paletteInfo = featureStates['1'].selectedPalette ? `using the selected ${featureStates['1'].selectedPalette}` : '';
-
-        const prompt = `Act as a senior fashion designer. Generate a concise, core concept (around 300 words). Use descriptive color names. Output clean text. Inputs: Style: ${style}, Garment(s): ${garmentTypes || 'Any'}, Main Color: ${color} ${paletteInfo}, Climate: ${climate}.`;
+        const prompt = `Act as a senior fashion designer. Generate a concise concept (around 300 words). Use descriptive color names. Output clean text without markdown. Inputs: Style: ${style}, Garment(s): ${garmentTypes || 'Any'}, Main Color: ${color} ${paletteInfo}, Climate: ${climate}.`;
         const result = await callProxy(prompt, document.getElementById('output1'), ev.currentTarget);
         if (result) {
             featureStates['1'].lastConcept = result;
@@ -313,13 +324,13 @@
             document.getElementById('mutate1').disabled = false;
         }
       });
-      document.getElementById('expand1').addEventListener('click', (ev) => callProxy(`Expand this concept into a full plan (max 800 words) with sections for Fabric, Construction, Accessories, and Warnings. Use descriptive color names. Concept: "${featureStates['1'].lastConcept}"`, document.getElementById('output1'), ev.currentTarget));
+      document.getElementById('expand1').addEventListener('click', (ev) => callProxy(`Expand this concept (max 800 words) with Fabric, Construction, Accessories, and Warnings sections. Use descriptive color names. Concept: "${featureStates['1'].lastConcept}"`, document.getElementById('output1'), ev.currentTarget));
       document.getElementById('mutate1').addEventListener('click', async (ev) => {
-        const result = await callProxy(`Mutate this fashion concept into a new, different idea (around 300 words). Use descriptive color names. Original Concept: "${featureStates['1'].lastConcept}"`, document.getElementById('output1'), ev.currentTarget);
+        const result = await callProxy(`Mutate this concept into a new idea (around 300 words). Use descriptive color names. Original Concept: "${featureStates['1'].lastConcept}"`, document.getElementById('output1'), ev.currentTarget);
         if (result) { featureStates['1'].lastConcept = result; }
       });
 
-      // --- Feature 2 Setup ---
+      // Feature 2
       document.getElementById('generate2').addEventListener('click', async (ev) => {
         const style = document.getElementById('style2').value;
         const garmentTypes = Array.from(document.querySelectorAll('#garmentType2 input:checked')).map(el => el.value).join(', ');
@@ -327,8 +338,7 @@
         const occasion = document.getElementById('occasion2').value;
         const color = document.getElementById('color2').value;
         const paletteInfo = featureStates['2'].selectedPalette ? `using the selected ${featureStates['2'].selectedPalette}` : '';
-        
-        const prompt = `Act as a friendly personal stylist. Generate a concise daily outfit idea (around 300 words). Avoid jargon. Use descriptive color names. Output clean text. Inputs: Style: ${style}, Garment(s): ${garmentTypes || 'Any'}, Body Shape: ${bodyShape}, Occasion: ${occasion}, Main Color: ${color} ${paletteInfo}.`;
+        const prompt = `As a friendly stylist, generate a concise outfit idea (around 300 words). Avoid jargon. Use descriptive color names. Output clean text. Inputs: Style: ${style}, Garment(s): ${garmentTypes || 'Any'}, Body Shape: ${bodyShape}, Occasion: ${occasion}, Main Color: ${color} ${paletteInfo}.`;
         const result = await callProxy(prompt, document.getElementById('output2'), ev.currentTarget);
         if (result) {
             featureStates['2'].lastConcept = result;
@@ -336,13 +346,13 @@
             document.getElementById('mutate2').disabled = false;
         }
       });
-      document.getElementById('expand2').addEventListener('click', (ev) => callProxy(`Expand this outfit idea with more details (max 800 words) on Fabrics, Layering, Accessories, and Warnings. Use descriptive color names. Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget));
+      document.getElementById('expand2').addEventListener('click', (ev) => callProxy(`Expand this outfit idea (max 800 words) with details on Fabrics, Layering, Accessories, and Warnings. Use descriptive color names. Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget));
       document.getElementById('mutate2').addEventListener('click', async (ev) => {
-        const result = await callProxy(`Mutate this daily outfit idea for a different vibe (around 300 words). Use descriptive color names. Original Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget);
+        const result = await callProxy(`Mutate this outfit idea for a different vibe (around 300 words). Use descriptive color names. Original Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget);
         if (result) { featureStates['2'].lastConcept = result; }
       });
       
-      // --- Universal UI Functionality ---
+      // Universal UI
       ['1', '2'].forEach(id => {
         document.getElementById(`copy${id}`).addEventListener('click', () => navigator.clipboard.writeText(document.getElementById(`output${id}`).textContent).then(() => alert('Copied!')));
         document.getElementById(`export${id}`).addEventListener('click', () => {
@@ -360,14 +370,14 @@
 
         colorInput.addEventListener('input', () => {
             colorPreview.style.backgroundColor = colorInput.value;
-            paletteContainer.style.display = 'block'; // Show the panel with the OK button
+            paletteContainer.style.display = 'block';
         });
         okColorBtn.addEventListener('click', () => {
             generatePalettes(colorInput.value, paletteContainer, okColorBtn);
         });
       });
       
-      // --- Theme engine ---
+      // Theme engine
       const docEl = document.documentElement;
       const accentPicker = document.getElementById('accent-color-picker');
       const accentPreview = document.getElementById('accent-color-preview');
@@ -382,7 +392,8 @@
       document.getElementById('dark-mode-btn').addEventListener('click', ()=>setTheme('dark'));
       accentPicker.addEventListener('input', (e)=>setAccentColor(e.target.value));
 
-      const savedTheme = localStorage.getItem('whatthefit_theme') || 'dark';
+      // Set initial theme from storage or default to light
+      const savedTheme = localStorage.getItem('whatthefit_theme') || 'light';
       const savedAccent = localStorage.getItem('whatthefit_accent') || '#c90000';
       setTheme(savedTheme); setAccentColor(savedAccent); accentPicker.value = savedAccent;
     </script>
