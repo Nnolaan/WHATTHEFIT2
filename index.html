@@ -29,6 +29,7 @@
       h1{text-align:center;color:var(--primary-accent-color);font-family:"Barrio",system-ui;font-size:80px;transition:.3s}
       h2{text-align:center;color:var(--primary-accent-color);transition:.3s;}
       
+      /* THIS IS THE CORRECT, STABLE LAYOUT */
       .feature-container { display: flex; gap: 20px; margin-bottom: 20px; align-items: stretch; }
       .control-panel { flex: 1; min-width: 320px; }
       .canvas { flex: 2; display: flex; flex-direction: column; min-width: 0; }
@@ -80,14 +81,34 @@
         padding:15px; background:var(--card-background); border-radius:8px; white-space:pre-wrap;
         border:1px solid var(--border-color); line-height:1.6; font-size:1em;
       }
-      
-      .color-dot { /* Style for the new color dots */
-        display: inline-block;
-        width: 12px; height: 12px;
-        border-radius: 50%;
-        border: 1px solid var(--border-color);
-        margin-left: 5px;
-        vertical-align: middle;
+
+      /* THIS IS THE NEW COLOR HIGHLIGHT FEATURE */
+      .color-highlight {
+        position: relative;
+        font-weight: bold;
+        text-shadow: 0 0 3px rgba(0,0,0,0.4); /* Improves readability on similar backgrounds */
+        cursor: pointer;
+      }
+      .color-highlight::after {
+        content: attr(data-hex);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #000;
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+        z-index: 10;
+      }
+      .color-highlight:hover::after {
+        opacity: 1;
+        visibility: visible;
       }
 
       .palette-container{
@@ -239,10 +260,11 @@
     <script type="module">
       const featureStates = { '1': { lastConcept: '', selectedPalette: '' }, '2': { lastConcept: '' } };
       
-      function renderColorsInText(html) {
+      // THIS IS THE NEW COLOR HIGHLIGHT FUNCTION
+      function renderColorHighlights(html) {
         const regex = /([\w\s]+)\s\(#([0-9a-fA-F]{6})\)/g;
         return html.replace(regex, (match, colorName, hexCode) => {
-            return `${colorName.trim()} <span class="color-dot" style="background-color:#${hexCode}"></span>`;
+            return `<span class="color-highlight" data-hex="#${hexCode}" style="color:#${hexCode};">${colorName.trim()}</span>`;
         });
       }
 
@@ -254,9 +276,9 @@
           const data = await r.json();
           if (!r.ok) throw new Error(data?.error || 'API error');
           const text = data?.text || 'No content generated.';
-          const cleanHtml = text.replace(/\*\*|[\*#\-]/g, '').replace(/\n/g, '<br>');
-          outputEl.innerHTML = renderColorsInText(cleanHtml);
-          return text;
+          const cleanHtml = text.replace(/\*\*/g, '').replace(/[\*#\-]/g, '').replace(/\n/g, '<br>');
+          outputEl.innerHTML = renderColorHighlights(cleanHtml); // Use the new function here
+          return text; // Return original text for state
         } catch (e) {
           outputEl.textContent = `Error: ${e.message}`; return null;
         } finally {
@@ -364,7 +386,7 @@
       });
       document.getElementById('expand2').addEventListener('click', (ev) => callProxy(`Expand the previous outfit idea (~800 words). Give more options for each piece (Top, Bottom, Shoes, Accessories) and more detailed tips on how they flatter the body shape. Maintain the simple, jargon-free tone and the color format rule: Color Name (#hexcode). Previous Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget));
       document.getElementById('mutate2').addEventListener('click', async (ev) => {
-        const result = await callProxy(`Mutate the previous outfit idea for a different vibe or occasion (~300 words). Keep the simple tone and follow the color format rule: Color Name (#hexcode). Original Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget);
+        const result = await callProxy(`Mutate the previous outfit idea for a different vibe (~300 words). Keep the simple tone and follow the color format rule: Color Name (#hexcode). Original Idea: "${featureStates['2'].lastConcept}"`, document.getElementById('output2'), ev.currentTarget);
         if (result) { featureStates['2'].lastConcept = result; }
       });
       // Universal UI
@@ -400,7 +422,6 @@
       document.getElementById('light-mode-btn').addEventListener('click', ()=>setTheme('light'));
       document.getElementById('dark-mode-btn').addEventListener('click', ()=>setTheme('dark'));
       accentPicker.addEventListener('input', (e)=>setAccentColor(e.target.value));
-
       const savedTheme = localStorage.getItem('whatthefit_theme') || 'light';
       const savedAccent = localStorage.getItem('whatthefit_accent') || '#000000';
       setTheme(savedTheme); 
