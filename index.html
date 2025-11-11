@@ -88,15 +88,20 @@
       .tab-content { display: none; }
       .tab-content.active { display: block; }
       
+      /* --- CAMERA & LABEL STYLES --- */
       .camera-container { position: relative; width: 100%; }
-      #camera-feed { width: 100%; border-radius: 8px; background: #000; aspect-ratio: 4 / 3; display: block; }
-      #capture-canvas { width: 100%; border-radius: 8px; aspect-ratio: 4 / 3; display: none; }
+      #camera-feed, #capture-canvas {
+        width: 100%; border-radius: 8px; background: #000; aspect-ratio: 4 / 3;
+        transform: scaleX(-1); /* Mirror the camera */
+      }
+      #camera-feed { display: block; }
+      #capture-canvas { display: none; }
       #countdown-overlay {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         display: none; justify-content: center; align-items: center;
         font-size: 8rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);
         -webkit-text-stroke: 2px black; text-stroke: 2px black;
-        z-index: 10;
+        z-index: 10; transform: scaleX(-1); /* Un-mirror the text */
       }
       #label-overlay {
         position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -121,53 +126,58 @@
         border-radius: 5px; white-space: nowrap; font-size: 0.9em;
       }
       
-      /* --- NEW TIMER STYLES --- */
+      /* --- NEW VERTICAL TIMER STYLES --- */
       #timer-controls {
-          display: none;
-          margin-top: 15px;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
+        display: none; /* Initially hidden */
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15px;
+        gap: 10px;
       }
-      .timer-buttons {
-          display: flex;
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          overflow: hidden;
-          background-color: var(--input-background);
+      .timer-options {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
       }
       #timer-controls label {
-          margin: 0;
-          position: relative;
-          font-weight: normal;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        margin: 0;
+        font-weight: normal;
       }
       #timer-controls input[type="radio"] {
-          position: absolute;
-          opacity: 0;
-          width: 100%;
-          height: 100%;
-          cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        margin: 0;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        transition: all 0.2s;
+        cursor: pointer;
       }
-      #timer-controls span {
-          display: block;
-          padding: 8px 16px;
-          color: var(--text-color);
-          transition: all 0.3s ease;
-          border-right: 1px solid var(--border-color);
+      #timer-controls input[type="radio"]::after {
+        content: '';
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background-color: var(--primary-accent-color);
+        transition: transform 0.2s ease-in-out;
       }
-      #timer-controls label:last-child span {
-          border-right: none;
+      #timer-controls input[type="radio"]:checked {
+        border-color: var(--primary-accent-color);
       }
-      #timer-controls input[type="radio"]:checked + span {
-          background-color: var(--primary-accent-color);
-          color: #fff;
-          font-weight: bold;
-          box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+      #timer-controls input[type="radio"]:checked::after {
+        transform: translate(-50%, -50%) scale(1);
       }
-      #timer-controls input[type="radio"]:not(:checked) + span:hover {
-          background-color: var(--border-color);
-      }
-
 
       .palette-container{
         position: relative;
@@ -222,16 +232,16 @@
                   <div id="countdown-overlay"></div>
                   <div id="label-overlay"></div>
               </div>
-              <!-- UPDATED TIMER HTML -->
+              <!-- REDESIGNED TIMER HTML -->
               <div id="timer-controls">
-                  <label>Timer:</label>
-                  <div class="timer-buttons">
-                      <label><input type="radio" name="timer" value="0" checked><span>Off</span></label>
-                      <label><input type="radio" name="timer" value="3"><span>3s</span></label>
-                      <label><input type="radio" name="timer" value="5"><span>5s</span></label>
-                      <label><input type="radio" name="timer" value="10"><span>10s</span></label>
-                      <label><input type="radio" name="timer" value="15"><span>15s</span></label>
-                  </div>
+                <strong>Timer:</strong>
+                <div class="timer-options">
+                    <label><input type="radio" name="timer" value="0" checked> Off</label>
+                    <label><input type="radio" name="timer" value="3"> 3s</label>
+                    <label><input type="radio" name="timer" value="5"> 5s</label>
+                    <label><input type="radio" name="timer" value="10"> 10s</label>
+                    <label><input type="radio" name="timer" value="15"> 15s</label>
+                </div>
               </div>
               <div class="button-group" style="justify-content: center; margin-top: 15px;">
                 <button id="start-camera" data-original-text="Start Camera">Start Camera</button>
@@ -241,7 +251,13 @@
           </div>
           <div class="canvas">
             <div id="feature0-output" class="feature output-feature">
-              <div id="output0" class="output">Enable your camera and capture an image of your outfit. The AI will provide feedback and styling ideas.</div>
+              <!-- UPDATED "ABOUT US" TEXT -->
+              <div id="output0" class="output">
+                <b>WHATTHEFIT</b> is an AI-powered style assistant built for fashion students, designers, and everyday creators who want to sharpen their eye and experiment fearlessly.<br><br>
+                Turn on your camera, and WHATTHEFIT analyzes your current outfit, giving you personalized styling tips, color balance suggestions, and ways to remix your look while learning what works for your proportions and vibe.<br><br>
+                If you prefer privacy, you can manually add the pieces you want to wear or design. The system then generates full outfit ideas, showing how different garments, fabrics, and colors can work together.<br><br>
+                Beyond styling, WHATTHEFIT is designed to spark creativity, helping fashion students and designers discover new combinations, explore fresh aesthetics, and build confidence in their visual decisions. It’s not just about dressing better, it’s about thinking like a designer.
+              </div>
             </div>
           </div>
         </div>
@@ -456,6 +472,7 @@
       const timerControls = document.getElementById('timer-controls');
       const countdownOverlay = document.getElementById('countdown-overlay');
       const labelOverlay = document.getElementById('label-overlay');
+      const initialOutputContent = output0.innerHTML;
       let stream;
 
       function resetCameraUI() {
@@ -467,9 +484,10 @@
           videoEl.style.display = 'block';
           canvasEl.style.display = 'none';
           labelOverlay.innerHTML = '';
-          output0.innerHTML = 'Enable your camera and capture an image of your outfit. The AI will provide feedback and styling ideas.';
+          output0.innerHTML = initialOutputContent;
           
           startBtn.textContent = startBtn.dataset.originalText;
+          startBtn.disabled = false;
           captureBtn.disabled = true;
           timerControls.style.display = 'none';
           countdownOverlay.style.display = 'none';
@@ -511,7 +529,8 @@
                 if(!item.item || !item.point) return;
                 const labelDiv = document.createElement('div');
                 labelDiv.className = 'outfit-label';
-                labelDiv.style.left = `${item.point.x}%`;
+                // Adjust x-coordinate for mirrored view
+                labelDiv.style.left = `${100 - item.point.x}%`;
                 labelDiv.style.top = `${item.point.y}%`;
                 labelDiv.innerHTML = `<div class="dot"></div><div class="line"></div><div class="text">${item.item}</div>`;
                 labelOverlay.appendChild(labelDiv);
@@ -524,6 +543,7 @@
       captureBtn.addEventListener('click', () => {
         const timerValue = parseInt(document.querySelector('input[name="timer"]:checked').value, 10);
         captureBtn.disabled = true;
+        startBtn.disabled = true;
 
         const performCapture = () => {
             // Freeze frame
@@ -534,6 +554,7 @@
             videoEl.style.display = 'none';
             canvasEl.style.display = 'block';
             startBtn.textContent = 'Start Over';
+            startBtn.disabled = false;
             
             // Analyze
             const base64ImageData = canvasEl.toDataURL('image/jpeg', 0.5).split(',')[1];
